@@ -5,7 +5,7 @@
 
 	<fx:Script>
 		<![CDATA[	
-			import Configuration;
+			import Configuration.AppConfig;
 			
 			[Bindable]
 			private var inputName:String;
@@ -15,8 +15,8 @@
 			
 			protected function submitBtn_clickHandler(event:MouseEvent):void
 			{	
-				//AppConfig.GetAppConfigInstance();
-				//outputValue=AppConfig.GetAppSettings(inputName);
+				AppConfig.GetAppConfigInstance();
+				outputValue=AppConfig.GetAppSettings(inputName);
 			}
 		]]>
 	</fx:Script>
