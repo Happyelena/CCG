@@ -6,6 +6,8 @@ package Configuration
 	import flash.utils.Dictionary;
 	import flash.xml.XMLDocument;
 	
+	import mx.collections.ArrayCollection;
+	
 	public class AppConfig
 	{
 		private static var appConfigSettings:Dictionary;
@@ -14,7 +16,6 @@ package Configuration
 		
 		private const ConfigFilePath:String="appConfig.xml";
 		
-		private static var loadCompletedTag:Boolean=false;
 		
 		public function AppConfig()
 		{
@@ -23,11 +24,21 @@ package Configuration
 				var appConfigReq:URLRequest=new URLRequest(ConfigFilePath);
 				appConfigReq.contentType="text/xml";
 				var appConfigLoader:URLLoader=new URLLoader( appConfigReq);
-				var appConfigXml:XML=new XML(appConfigLoader.data);
-				appConfigSettings=new Dictionary();
-				for each(var item:XML in appConfigXml)
+				appConfigLoader.addEventListener(Event.COMPLETE,appConfigLoadCompletedEventHandler);
+				
+				function appConfigLoadCompletedEventHandler(e:Event):void
 				{
-					appConfigSettings[item.name]=item.value;
+					var appConfigXml:XML=new XML(appConfigLoader.data);
+					appConfigSettings=new Dictionary();
+					trace(appConfigXml.descendants("item").length());
+					for each(var item:XML in appConfigXml.descendants("item"))
+					{
+						var name:String=item.@name;
+						var value:String=item.@value;
+						appConfigSettings[name]=value;
+						trace(name);
+						trace(value);
+					}
 				}
 			}
 			else
@@ -35,7 +46,7 @@ package Configuration
 				throw new Error("AppConfig 只能初始化一次");
 			}
 		}
-		
+
 		public static function GetAppConfigInstance():AppConfig
 		{
 			if(appConfig==null)
@@ -47,8 +58,9 @@ package Configuration
 		
 		public static function GetAppSettings(name:String):String
 		{
+			trace(appConfigSettings[name]);
 			return appConfigSettings[name];
 		}
-		
+				
 	}
 }

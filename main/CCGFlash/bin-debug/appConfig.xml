@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <appConfig>
 	<item name="static" value="a.xml"/>
+	<item name="2" value="b.xml"/>
 </appConfig>
